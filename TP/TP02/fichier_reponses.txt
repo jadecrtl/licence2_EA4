@@ -1,0 +1,15 @@
+Exercice 1 :
+
+1)
+Pour le premier graphique on constate qu'à partir de 20 la croissance de la courbe est exponentielle.
+Pour le deuxième graphique la croissance est beaucoup plus lente donc celui la est moins efficace en temps.
+
+2) 
+Ces différentes mesures sur le nombre d’additions d’entiers ne reflètent pas les temps
+d’exécution car il y a d'autres facteurs que les comparaisons ou les affectations.
+
+
+
+
+
+

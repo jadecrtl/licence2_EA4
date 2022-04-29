@@ -24,7 +24,11 @@ except ModuleNotFoundError:
 #
 
 def triSelection(T):
-    # À COMPLETER
+    for i in range(1, len(T)) :
+        for j in range(i, 0, -1) :
+            if T[j - 1] > T[j] :
+                T[j - 1], T[j] = T[j], T[j - 1]
+            else : break
     return T
 
 ############################################################
@@ -36,8 +40,11 @@ def triSelection(T):
 #
 
 def randomPerm(n):
-    T = [i+1 for i in range(n)]
-    # À COMPLETER
+    T = [i + 1 for i in range(n)]
+    for i in range(1, n) :
+        for j in range(i, 0, -1) :
+            r = random.randint(1, n - 1)
+            T[j],T[r] = T[r],T[j]
     return T
 
 ############################################################
@@ -50,8 +57,12 @@ def randomPerm(n):
 #
 
 def testeQueLaFonctionTrie(f):
-    # À COMPLETER
-    return False
+    for i in range(2, 100) :
+        t = f(randomPerm(i))
+        for j in range(len(t)) :
+            if t[j] != j + 1 :
+                return False
+    return True
 
 ############################################################
 # Exercice 1.4
@@ -61,9 +72,8 @@ def testeQueLaFonctionTrie(f):
 # les bornes a et b.
 #
 
-def randomTab(n,a,b):
-    T = [0]*n
-    # À COMPLETER
+def randomTab(n, a, b):
+    T = [random.randint(a, b)] * n
     return T
 
 ############################################################
@@ -75,9 +85,12 @@ def randomTab(n,a,b):
 # liste des entiers n à 1 si rev vaut True.
 #
 
-def derangeUnPeu(n,k,rev):
+def derangeUnPeu(n, k, rev):
     T = [ n - i for i in range(n) ] if rev else [ i + 1 for i in range(n) ]
-    # À COMPLETER
+    for i in range(k) :
+        r1 = random.randint(0,len(T) - 1)
+        r2 = random.randint(0,len(T) - 1)
+        T[r1],T[r2] = T[r2],T[r1]
     return T
 
 
@@ -90,7 +103,11 @@ def derangeUnPeu(n,k,rev):
 #
 
 def triInsertionEchange(T):
-    # À COMPLETER
+    for i in range(1, len(T)) :
+        for j in range(i, 0, -1) : #parcours de droite à gauche
+            if T[j - 1] > T[j] :
+                T[j - 1], T[j] = T[j], T[j - 1]
+            else : break
     return T
 
 def triInsertionRotation(T):
@@ -107,13 +124,37 @@ def triInsertionRapide(T):
 # Tri fusion
 #
 
-def fusion(T1,T2):
-    # À COMPLETER
-    return T1 + T2
+def fusion(T1, T2):
+    indice_tableau1 = 0
+    indice_tableau2 = 0    
+    taille_tableau1 = len(T1)
+    taille_tableau2 = len(T2)
+    tableau_fusionne = []
+    while indice_tableau1 < taille_tableau1 and indice_tableau2<taille_tableau2:
+        if T1[indice_tableau1] < T2[indice_tableau2]:
+            tableau_fusionne.append(T1[indice_tableau1])
+            indice_tableau1 += 1
+        else:
+            tableau_fusionne.append(T2[indice_tableau2])
+            indice_tableau2 += 1
+    while indice_tableau1 < taille_tableau1:
+        tableau_fusionne.append(T1[indice_tableau1])
+        indice_tableau1 += 1
+    while indice_tableau2 < taille_tableau2:
+        tableau_fusionne.append(T2[indice_tableau2])
+        indice_tableau2 += 1
+    return tableau_fusionne
 
 def triFusion(T, deb=0, fin=None) :
-    # À COMPLETER
-    return T
+    if  len(T) <= 1: 
+        return T
+    pivot = len(T)//2
+    tableau1 = T[:pivot]
+    tableau2 = T[pivot:]
+    gauche = triFusion(tableau1,deb,fin)
+    droite = triFusion(tableau2,deb,fin)
+    fusionne = fusion(gauche,droite)
+    return fusionne
 
 ############################################################
 # Exercice 2.3
@@ -122,7 +163,11 @@ def triFusion(T, deb=0, fin=None) :
 #
 
 def triBulles(T) :
-    # À COMPLETER
+    n = len(T)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if T[j] > T[j + 1] :
+                T[j], T[j + 1] = T[j + 1], T[j]
     return T
 
 ############################################################
@@ -142,7 +187,17 @@ def triInsertionPartiel(T, gap, debut) :
 #
 
 def triShell(T) :
-    # À COMPLETER
+    n = len(T)
+    gap = n/2
+    while gap > 0:
+        for i in range(gap, n):
+            tmp = T[i]
+            j = i
+            while  j >= gap and T[j - gap] > tmp:
+                T[j] = T[j - gap]
+                j -= gap
+            T[j] = tmp
+        gap /= 2
     return T
 
 ##############################################################
@@ -228,15 +283,15 @@ if __name__ == '__main__':
 
   #exercice1
   
-  # print("Exercice 1")
-  # algos = [triSelection]
-  # compareAlgos(algos)
+  print("Exercice 1")
+  algos = [triSelection]
+  compareAlgos(algos)
   
   #exercice2
   
-  # print("Exercice 2")
-  # algos += trisInsertion + [triFusion, triBulles]
-  # compareAlgos(algos)
+  print("Exercice 2")
+  algos += trisInsertion + [triFusion, triBulles]
+  compareAlgos(algos)
 
   ###################################################################
   ##### Commentez ici les résultats obtenus pour les différents #####
@@ -247,16 +302,16 @@ if __name__ == '__main__':
   
   #exercice3
   
-  # print("Exercice 3")
-  # algos = [triShell]
-  # compareAlgos(algos)
+  print("Exercice 3")
+  algos = [triShell]
+  compareAlgos(algos)
 
 
   #compare tous les algos
 
-  # print("Comparaisons de tous les algos")
-  # algos = trisInsertion + trisLents + [ triFusion, triShell ]
-  # compareAlgos(algos, taille=2000, pas=200)
+  print("Comparaisons de tous les algos")
+  algos = trisInsertion + trisLents + [ triFusion, triShell ]
+  compareAlgos(algos, taille=2000, pas=200)
 
   ###################################################################
   ##### Commentez ici les résultats obtenus pour les différents #####
@@ -267,9 +322,9 @@ if __name__ == '__main__':
   
   #compare les tris fusions et Shell
 
-  # print("Comparaisons des tris fusion et Shell")
-  # algos = [ triFusion, triShell ]
-  # compareAlgos(algos, taille=10000, pas=500)
+  print("Comparaisons des tris fusion et Shell")
+  algos = [ triFusion, triShell ]
+  compareAlgos(algos, taille=10000, pas=500)
 
   ###################################################################
   ##### Commentez ici les résultats obtenus pour les différents #####
@@ -280,9 +335,9 @@ if __name__ == '__main__':
   
   # comparaison sur tableaux presque triés
   
-  # print("\nComparaisons sur tableaux presque triés")
-  # algos = trisInsertion + [ triFusion, triShell ]
-  # compareAlgosSurTableauxTries (algos)
+  print("\nComparaisons sur tableaux presque triés")
+  algos = trisInsertion + [ triFusion, triShell ]
+  compareAlgosSurTableauxTries (algos)
 
   ###################################################################
   ##### Commentez ici les résultats obtenus pour les différents #####
